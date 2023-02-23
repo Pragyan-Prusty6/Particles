@@ -1,6 +1,6 @@
 const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext('2d');
-
+let numParticles = 0;
 const width = (canvas.width = window.innerWidth);
 const height =( canvas.height = window.innerHeight);
 const para = document.querySelector('p');
@@ -21,10 +21,10 @@ class Shape{
   }
 }
 class BlackHole extends Shape{
-  constructor(x,y,color='black',size=50){
+  constructor(x,y){
     super(x,y,20,20);
-    this.color=color;
-   this.size=size;
+    this.color="black";
+   this.size=50;
    window.addEventListener("keydown", (e) => {
     switch (e.key) {
       case "a":
@@ -52,11 +52,21 @@ draw(){
 
 }
 checkBounds(){
-  if (((this.x + this.size) >= width)||((this.x - this.size) <= 0)
-  ||((this.y + this.size) >= height)||((this.y - this.size) <= 0)){
-   
-    this.size = -(this.size);
-  }
+   if ((this.x + this.size) >= width) {
+      this.x -= this.size;
+    }
+
+    if ((this.x - this.size) <= 0) {
+      this.x += this.size;
+    }
+
+    if ((this.y + this.size) >= height) {
+      this.y -= this.size;
+    }
+
+    if ((this.y - this.size) <= 0) {
+      this.y += this.size;
+    }
  
 }
 collisionDetect() {
@@ -67,7 +77,7 @@ collisionDetect() {
       const distance = Math.sqrt(dx * dx + dy * dy);
       //Collision detected
       if (distance < this.size + particle.size) {
-        particle.color = this.color = 'transparent';
+       
         particle.exists=false;
         numParticles--;
         para.textContent = "Particle count: " + numParticles;
@@ -78,11 +88,11 @@ collisionDetect() {
 }
 }
 class Particle extends Shape{
-    constructor(x,y,velX,velY,color,size,exists=true){
+    constructor(x,y,velX,velY,color,size){
        super(x,y,velX,velY);
         this.color=color;
         this.size=size;
-        this.exists=exists;
+        this.exists=true;
 
     }
     draw(){
@@ -150,9 +160,11 @@ while (particles.length < 10) {
   );
 
   particles.push(particle);
+    numParticles++;
+  para.textContent = "Particle count: " + numParticles;
 }
-let numParticles=particles.length;
-para.textContent = "Particle count: " + numParticles;
+const blackHole = new BlackHole(400,350);
+   
 function loop() {
   //Sets the canvas fill color to semi-transparent black,
   // then draws a rectangle of the color 
@@ -162,8 +174,7 @@ function loop() {
   //previous frame's drawing before the next one is drawn
     ctx.fillStyle = "rgba(0, 140, 200,0.5)";
     ctx.fillRect(0, 0, width, height);
-    const blackHole = new BlackHole(400,350);
-   
+    
 
     for (const particle of particles) {
       if(particle.exists){
