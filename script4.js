@@ -27,18 +27,18 @@ class BlackHole extends Shape{
    this.size=50;
    window.addEventListener("keydown", (e) => {
     switch (e.key) {
-      case "a":
-        this.x -= this.velX;
-        break;
-      case "d":
-        this.x += this.velX;
-        break;
-      case "w":
-        this.y -= this.velY;
-        break;
-      case "s":
-        this.y += this.velY;
-        break;
+      case 'ArrowLeft':
+          this.x -= this.velX;
+          break;
+        case 'ArrowRight':
+          this.x += this.velX;
+          break;
+        case 'ArrowUp':
+          this.y -= this.velY;
+          break;
+        case 'ArrowDown':
+          this.y += this.velY;
+          break;
     }
   });
 }
